@@ -1,0 +1,170 @@
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--bg-base);
+}
+.authCard {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.logoIcon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--cyan-dim);
+  border: 1px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+}
+.logoTitle {
+  font-family: var(--ff-head);
+  font-size: 22px; font-weight: 700;
+  color: var(--txt1); letter-spacing: 0.5px;
+}
+.logoSub {
+  font-size: 11px; color: var(--txt2);
+  margin-top: 2px; font-family: var(--ff-mono);
+  letter-spacing: 1px;
+}
+.toggleRow {
+  display: flex; gap: 6px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border-radius: 10px; padding: 4px;
+}
+.toggleBtn {
+  flex: 1; padding: 8px;
+  border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; background: transparent;
+  color: var(--txt2); transition: all 0.2s;
+  font-family: var(--ff-body);
+}
+.toggleActive {
+  background: var(--bg-panel);
+  color: var(--cyan);
+  border: 1px solid var(--border-hi);
+}
+.adminNote {
+  font-size: 11px; color: var(--amber);
+  background: var(--amber-dim);
+  border: 1px solid rgba(255,171,0,0.2);
+  border-radius: 8px; padding: 8px 12px;
+  margin-bottom: 12px; font-family: var(--ff-mono);
+}
+.adminBtn {
+  background: linear-gradient(135deg, #3a0870, #6b0fa8) !important;
+  border-color: rgba(179,136,255,0.4) !important;
+  color: #e8d5ff !important;
+}
+.formTitle {
+  font-size: 15px; font-weight: 600;
+  color: var(--txt1); margin-bottom: 20px;
+}
+.form { display: flex; flex-direction: column; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.switchText {
+  text-align: center; margin-top: 20px;
+  font-size: 13px; color: var(--txt2);
+}
+.switchLink {
+  color: var(--cyan); text-decoration: none; font-weight: 600;
+}
+.switchLink:hover { text-decoration: underline; }
+@media (max-width: 480px) {
+  .authCard { padding: 24px 18px; border-radius: 16px; }
+  .logoTitle { font-size: 18px; }
+}
+
+/* ── Card animate ────────────────────────────────────────── */
+.cardAnimate {
+  animation: cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Forgot password link ────────────────────────────────── */
+.forgotLink {
+  background: none; border: none; cursor: pointer;
+  color: var(--cyan); font-size: 12px;
+  font-family: var(--ff-mono); text-decoration: none;
+  padding: 0; transition: opacity 0.2s;
+}
+.forgotLink:hover { opacity: 0.75; text-decoration: underline; }
+
+/* ── Modal ───────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modalCard {
+  width: 100%; max-width: 400px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-hi);
+  border-radius: 16px; padding: 24px;
+  animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modalHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.modalTitle {
+  font-family: var(--ff-mono); font-size: 13px; font-weight: 700;
+  color: var(--txt1); letter-spacing: 0.5px;
+}
+.modalClose {
+  background: none; border: 1px solid var(--border);
+  border-radius: 6px; color: var(--txt2);
+  width: 28px; height: 28px; cursor: pointer; font-size: 12px;
+  transition: all 0.15s;
+}
+.modalClose:hover { border-color: var(--red); color: var(--red); }
+
+.modalDesc {
+  font-size: 13px; color: var(--txt2); margin-bottom: 16px; line-height: 1.6;
+}
+
+/* ── Sent success box ────────────────────────────────────── */
+.sentBox { text-align: center; padding: 8px 0; }
+.sentIcon { font-size: 40px; margin-bottom: 12px; }
+.sentTitle { font-family: var(--ff-mono); font-size: 14px; font-weight: 700; color: var(--txt1); margin-bottom: 8px; }
+.sentDesc { font-size: 13px; color: var(--txt2); line-height: 1.6; }
+
+/* ── OTP styles ──────────────────────────────────────────── */
+.otpInfo {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.otpInfoText { font-size: 13px; color: var(--txt2); margin-bottom: 6px; }
+.otpEmail    { font-family: var(--ff-mono); font-size: 13px; font-weight: 700; color: var(--cyan); }
+.otpExpiry   { font-size: 11px; color: var(--txt3); margin-top: 6px; font-family: var(--ff-mono); }
+.otpInput    { text-align: center; letter-spacing: 8px !important; font-size: 20px !important; }
