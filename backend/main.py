@@ -31,7 +31,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:3000",
-        "https://YOUR_NETLIFY_URL.netlify.app",  # Update after deploying frontend
+        "https://frontend-xi-lake-71.vercel.app", # Update after deploying frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
