@@ -23,14 +23,19 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
     try:
         api_key = os.getenv("SENDGRID_API_KEY")
         from_email = os.getenv("FROM_EMAIL")
+
+        if not api_key or not from_email:
+            print("❌ Missing SENDGRID_API_KEY or FROM_EMAIL")
+            return False
+
         message = Mail(
-            from_email=os.getenv("FROM_EMAIL"),
+            from_email=from_email,
             to_emails=to_email,
             subject=subject,
             html_content=html_body
         )
 
-        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        sg = SendGridAPIClient(api_key)
         response = sg.send(message)
 
         print("✅ Email sent:", response.status_code)
@@ -47,20 +52,31 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
 
 def send_otp_email(to_email: str, name: str, otp: str) -> bool:
     subject = "PhishGuard — Your OTP Verification Code"
+
     html = f"""
     <h2>Hi {name},</h2>
     <p>Your OTP is:</p>
     <h1>{otp}</h1>
     <p>This OTP is valid for 10 minutes.</p>
     """
+
     return send_email(to_email, subject, html)
 
 
 # ─────────────────────────────────────────────
-# 🔹 Reset Password Email
+# 🔹 Reset Password Email (FIXED 🔥)
 # ─────────────────────────────────────────────
 
-def send_reset_email(to_email: str, name: str, reset_token: str, base_url: str) -> bool:
+def send_reset_email(to_email: str, name: str, reset_token: str, base_url: str = None) -> bool:
+    
+    # ✅ Agar base_url pass nahi hua to env se le lo
+    if not base_url:
+        base_url = os.getenv("FRONTEND_URL")
+
+    if not base_url:
+        print("❌ FRONTEND_URL not set")
+        return False
+
     reset_link = f"{base_url}/reset-password?token={reset_token}"
     subject = "PhishGuard — Password Reset"
 
@@ -69,6 +85,9 @@ def send_reset_email(to_email: str, name: str, reset_token: str, base_url: str) 
     <p>Click below to reset your password:</p>
     <a href="{reset_link}">Reset Password</a>
     <p>This link expires in 30 minutes.</p>
+    <br>
+    <p>If button doesn't work, copy this link:</p>
+    <p>{reset_link}</p>
     """
 
     return send_email(to_email, subject, html)
