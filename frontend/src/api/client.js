@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({ 
-  baseURL: 'https://phishguard-rprx.onrender.com/api'
+  baseURL: import.meta.env.VITE_API_URL || 'https://phishguard-backend-6ypq.onrender.com/api'
 })
 
 // Attach JWT token to every request automatically
