@@ -122,7 +122,7 @@ async def forgot_password(body: ForgotPasswordRequest, db=Depends(get_db)):
         }}
     )
 
-    base_url = "https://phishguard-app-six.vercel.app"
+    base_url = "https://frontend-xi-lake-71.vercel.app"
     sent = send_reset_email(body.email.lower(), user["name"], token, base_url)
 
     if not sent:
