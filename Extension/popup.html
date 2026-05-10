@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PhishGuard AI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 380px;
+      min-height: 500px;
+      background: #0a0e1a;
+      color: #e0e6ff;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 14px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #0d1b2a, #1a2744);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .logo {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #00c8ff, #0057ff);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .header-text h1 { font-size: 16px; font-weight: 700; color: #fff; }
+    .header-text p { font-size: 11px; color: #7a9cc5; }
+
+    /* URL Bar */
+    .url-section { padding: 16px 20px; }
+    .url-label { font-size: 11px; color: #7a9cc5; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .url-box {
+      background: #0d1b2a;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .url-box input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: #e0e6ff;
+      font-size: 13px;
+      font-family: monospace;
+    }
+    .url-box input::placeholder { color: #3a5a7a; }
+
+    /* Scan Button */
+    .scan-btn {
+      width: calc(100% - 40px);
+      margin: 0 20px 16px;
+      padding: 12px;
+      background: linear-gradient(135deg, #00c8ff, #0057ff);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: opacity 0.2s;
+    }
+    .scan-btn:hover { opacity: 0.9; }
+    .scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Result Card */
+    .result-card {
+      margin: 0 20px 16px;
+      border-radius: 12px;
+      padding: 16px;
+      display: none;
+    }
+    .result-card.safe { background: #0a2e1a; border: 1px solid #00c853; }
+    .result-card.suspicious { background: #2e1a00; border: 1px solid #ff9800; }
+    .result-card.phishing { background: #2e0a0a; border: 1px solid #ff1744; }
+    .result-card.show { display: block; }
+
+    .verdict-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .verdict-icon { font-size: 28px; }
+    .verdict-text h2 { font-size: 18px; font-weight: 800; }
+    .verdict-text p { font-size: 11px; color: #7a9cc5; margin-top: 2px; }
+
+    .safe .verdict-text h2 { color: #00c853; }
+    .suspicious .verdict-text h2 { color: #ff9800; }
+    .phishing .verdict-text h2 { color: #ff1744; }
+
+    /* Score bars */
+    .scores { margin-top: 12px; }
+    .score-row { margin-bottom: 8px; }
+    .score-label { display: flex; justify-content: space-between; font-size: 11px; color: #7a9cc5; margin-bottom: 4px; }
+    .score-bar { height: 6px; background: #1a2744; border-radius: 3px; overflow: hidden; }
+    .score-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+    .fill-safe { background: #00c853; }
+    .fill-warn { background: #ff9800; }
+    .fill-danger { background: #ff1744; }
+    .fill-blue { background: #00c8ff; }
+
+    /* Loading */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+      color: #7a9cc5;
+    }
+    .loading.show { display: block; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid #1e3a5f;
+      border-top-color: #00c8ff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error */
+    .error-box {
+      margin: 0 20px 16px;
+      background: #2e0a0a;
+      border: 1px solid #ff1744;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      color: #ff6b6b;
+      display: none;
+    }
+    .error-box.show { display: block; }
+
+    /* Current tab info */
+    .current-tab {
+      margin: 0 20px 8px;
+      background: #0d1b2a;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .current-tab span { font-size: 11px; color: #7a9cc5; }
+    .use-current-btn {
+      background: #1e3a5f;
+      border: none;
+      color: #00c8ff;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 12px 20px;
+      border-top: 1px solid #1e3a5f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer a {
+      color: #00c8ff;
+      text-decoration: none;
+      font-size: 11px;
+    }
+    .footer p { font-size: 10px; color: #3a5a7a; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">🛡️</div>
+    <div class="header-text">
+      <h1>PhishGuard AI</h1>
+      <p>Threat Detection System</p>
+    </div>
+  </div>
+
+  <!-- Current Tab -->
+  <div style="padding: 12px 20px 0;">
+    <div class="current-tab">
+      <span id="currentTabUrl">Loading current tab...</span>
+      <button class="use-current-btn" id="useCurrentBtn">Use This URL</button>
+    </div>
+  </div>
+
+  <!-- URL Input -->
+  <div class="url-section">
+    <div class="url-label">Enter URL to Scan</div>
+    <div class="url-box">
+      <span style="color:#3a5a7a;">🔗</span>
+      <input type="text" id="urlInput" placeholder="https://example.com" />
+    </div>
+  </div>
+
+  <!-- Scan Button -->
+  <button class="scan-btn" id="scanBtn">🔍 SCAN URL</button>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Analyzing URL...</p>
+    <p style="font-size:11px; margin-top:4px;">Checking ML model + VirusTotal</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- Result -->
+  <div class="result-card" id="resultCard">
+    <div class="verdict-row">
+      <div class="verdict-icon" id="verdictIcon">✅</div>
+      <div class="verdict-text">
+        <h2 id="verdictText">SAFE</h2>
+        <p id="verdictSub">No threats detected</p>
+      </div>
+    </div>
+    <div class="scores">
+      <div class="score-row">
+        <div class="score-label"><span>Final Score</span><span id="finalScore">0%</span></div>
+        <div class="score-bar"><div class="score-fill fill-safe" id="finalBar" style="width:0%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><span>ML Model</span><span id="mlScore">0%</span></div>
+        <div class="score-bar"><div class="score-fill fill-blue" id="mlBar" style="width:0%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><span>URL Risk</span><span id="urlScore">0%</span></div>
+        <div class="score-bar"><div class="score-fill fill-warn" id="urlBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <a href="https://frontend-xi-lake-71.vercel.app" target="_blank">Open Web App ↗</a>
+    <p>PhishGuard AI · Sneha Sharma</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

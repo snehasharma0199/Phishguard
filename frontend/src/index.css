@@ -17,9 +17,9 @@
   --amber:      #ffab00;
   --amber-dim:  rgba(255,171,0,0.09);
   --purple:     #b388ff;
-  --txt1:       #deeaf8;
-  --txt2:       #6e93b8;
-  --txt3:       #2e4a66;
+  --txt1:       #e5e9ed;
+  --txt2:       #a3c2e1;
+  --txt3:       #f0f3f7;
   --ff-head:    'Rajdhani', sans-serif;
   --ff-mono:    'JetBrains Mono', monospace;
   --ff-body:    'DM Sans', sans-serif;
@@ -41,9 +41,9 @@
   --red-dim:    rgba(232,0,45,0.08);
   --amber:      #cc7700;
   --amber-dim:  rgba(204,119,0,0.08);
-  --txt1:       #0d1f33;
-  --txt2:       #3a5a7a;
-  --txt3:       #8aabcc;
+  --txt1:       #031a34;
+  --txt2:       #0b4c8d;
+  --txt3:       #010d1a;
 }
 
 html, body, #root {

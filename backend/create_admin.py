@@ -3,11 +3,11 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from passlib.context import CryptContext
 from datetime import datetime, timezone
 
-MONGO_URI      = "YOUR_MONGO_URI_HERE"
+MONGO_URI      = "mongodb+srv://Sneha:SnehaSharma2026@cluster0.rilfw05.mongodb.net/phishguard?retryWrites=true&w=majority&appName=Cluster0"
 DB_NAME        = "phishguard"
-ADMIN_EMAIL    = "your_admin_email@gmail.com"
+ADMIN_EMAIL    = "sneha200419@gmail.com"
 ADMIN_PASSWORD = "Admin2026"
-ADMIN_NAME     = "Sneha Admin"
+ADMIN_NAME     = "Sneha Sharma"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,7 +18,12 @@ async def create_admin():
     if existing:
         await db.users.update_one(
             {"email": ADMIN_EMAIL},
-            {"$set": {"role": "admin", "password": pwd_context.hash(ADMIN_PASSWORD), "is_active": True}}
+            {"$set": {
+    "name": ADMIN_NAME,
+    "role": "admin",
+    "password": pwd_context.hash(ADMIN_PASSWORD),
+    "is_active": True
+}}
         )
         print(f"✅ Admin updated: {ADMIN_EMAIL}")
     else:
